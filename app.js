@@ -1,14 +1,53 @@
 const express = require('express');
-const app = express();
+const { Server } = require('socket.io'); // Importamos socket.io
+const handlebars = require('express-handlebars'); // Importamos handlebars
 const productosRouter = require('./routes/products');
 const cartsRouter = require('./routes/carts'); 
+const path = require('path');
 
+const app = express();
+const PORT = 8080;
+
+// Configurar Handlebars
+app.engine('handlebars', handlebars.engine());
+app.set('view engine', 'handlebars');
+app.set('views', path.join(__dirname, 'views'));
+
+// Configurar middlewares
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public'))); // Para archivos estáticos
 
-// Configura las rutas
+// Configurar rutas
 app.use('/api/products', productosRouter);
 app.use('/api/carts', cartsRouter); 
-const PORT = 8080;
-app.listen(PORT, () => {
+
+// Ruta principal para la vista home
+app.get('/', (req, res) => {
+    const productos = require('./data/productos.json');
+    res.render('home', { productos });
+});
+
+// Ruta para la vista en tiempo real
+app.get('/realtimeproducts', (req, res) => {
+    const productos = require('./data/productos.json');
+    res.render('realTimeProducts', { productos });
+});
+
+// Iniciar el servidor
+const server = app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
+
+// Configurar WebSocket
+const io = new Server(server);
+
+io.on('connection', (socket) => {
+    console.log('Nuevo cliente conectado');
+    
+    // Emitir productos actualizados a todos los clientes cuando se agregue un nuevo producto
+    socket.on('nuevoProducto', (producto) => {
+        io.emit('actualizarProductos', producto);
+    });
+});
+
+app.set('io', io);
