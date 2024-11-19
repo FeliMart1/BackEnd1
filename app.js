@@ -8,10 +8,17 @@ const path = require('path');
 const app = express();
 const PORT = 8080;
 
+
+const viewsRoutes = require('./routes/viewsRoutes'); // Importa el archivo de rutas
+app.use('/', viewsRoutes); // Usar las rutas de vistas
+
 // Configurar Handlebars
-app.engine('handlebars', handlebars.engine());
+app.engine('handlebars', handlebars.engine({
+    defaultLayout: 'main', 
+    layoutsDir: path.join(__dirname, 'views', 'layouts'), 
+}));
 app.set('view engine', 'handlebars');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'views')); 
 
 // Configurar middlewares
 app.use(express.json());

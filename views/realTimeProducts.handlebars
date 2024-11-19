@@ -6,24 +6,24 @@
     <title>Productos en Tiempo Real</title>
 </head>
 <body>
-    <h1>Lista de Productos en Tiempo Real</h1>
-    <ul id="productos">
-        {{#each productos}}
-            <li>{{this.title}} - ${{this.price}}</li>
-        {{/each}}
-    </ul>
+<h1>Lista de Productos en Tiempo Real</h1>
+<ul id="productos">
+    {{#each productos}}
+        <li>{{this.title}} - ${{this.price}}</li>
+    {{/each}}
+</ul>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        const socket = io();
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
 
-        // Escuchar evento de actualización de productos
-        socket.on('actualizarProductos', (producto) => {
-            const lista = document.getElementById('productos');
-            const nuevoProducto = document.createElement('li');
-            nuevoProducto.textContent = `${producto.title} - $${producto.price}`;
-            lista.appendChild(nuevoProducto);
-        });
-    </script>
+    // Escuchar evento de actualización de productos
+    socket.on('actualizarProductos', (producto) => {
+        const lista = document.getElementById('productos');
+        const nuevoProducto = document.createElement('li');
+        nuevoProducto.textContent = `${producto.title} - $${producto.price}`;
+        lista.appendChild(nuevoProducto);
+    });
+</script>
 </body>
 </html>
