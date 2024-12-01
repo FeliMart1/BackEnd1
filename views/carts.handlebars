@@ -1,0 +1,56 @@
+{{!-- Extiende el layout principal --}}
+{{{body}}}
+
+<h1>Carritos</h1>
+
+<div>
+  <form id="filterCartForm">
+    <label for="cartId">Buscar carrito por ID:</label>
+    <input type="text" id="cartId" name="cartId" placeholder="Ingrese ID de carrito" />
+    <button type="submit">Buscar</button>
+  </form>
+</div>
+
+<div id="cartContainer">
+  <p>Ingrese un ID para buscar un carrito.</p>
+</div>
+
+<script>
+  // Lógica para manejar la búsqueda de carritos
+  document.getElementById('filterCartForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const cartId = document.getElementById('cartId').value.trim();
+    const cartContainer = document.getElementById('cartContainer');
+
+    // Si se ingresó un ID de carrito
+    if (cartId) {
+      try {
+        const response = await fetch(`/api/carts/${cartId}`);
+        const data = await response.json();
+
+        if (data.status === 'success') {
+          // Renderizar la información del carrito en el contenedor
+          cartContainer.innerHTML = `
+            <h2>Carrito ID: ${data.cart.id}</h2>
+            <ul>
+              ${data.cart.products
+                .map(
+                  (p) => `<li>Producto: ${p.product}, Cantidad: ${p.quantity}</li>`
+                )
+                .join('')}
+            </ul>
+          `;
+        } else {
+          // Mostrar mensaje de carrito no encontrado
+          cartContainer.innerHTML = `<p>No se encontró el carrito con ID "${cartId}".</p>`;
+        }
+      } catch (error) {
+        // Mostrar mensaje de error en caso de fallo
+        cartContainer.innerHTML = `<p>Error al buscar el carrito. Por favor, intenta nuevamente.</p>`;
+      }
+    } else {
+      // Mostrar mensaje si no se ingresó ningún ID
+      cartContainer.innerHTML = `<p>Por favor, ingrese un ID válido para buscar un carrito.</p>`;
+    }
+  });
+</script>

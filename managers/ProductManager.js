@@ -25,37 +25,47 @@ class ProductManager {
         }
     }
 
+    // Método para agregar un nuevo producto
+    addProduct(newProduct) {
+        const productos = this.readProductosFile();
+        const lastId = productos.length > 0 ? productos[productos.length - 1].id : 0; 
+        const newId = lastId + 1;
+        const productWithId = { id: newId, ...newProduct };
+        productos.push(productWithId);    
+        this.writeProductosFile(productos);
+    
+        return productWithId;
+    }
+    
+
+    // Método para obtener todos los productos
     getAllProducts(limit) {
         const productos = this.readProductosFile();
         return limit ? productos.slice(0, limit) : productos;
     }
 
+    // Método para obtener un producto por ID
     getProductById(id) {
         const productos = this.readProductosFile();
         return productos.find((p) => p.id === id);
     }
 
-    addProduct(newProduct) {
-        const productos = this.readProductosFile();
-        productos.push(newProduct);
-        this.writeProductosFile(productos);
-        return newProduct;
-    }
-
+    // Método para actualizar un producto por ID
     updateProduct(id, updatedData) {
         const productos = this.readProductosFile();
         const productIndex = productos.findIndex((p) => p.id === id);
-        if (productIndex === -1) return null;
+        if (productIndex === -1) return null; // Si no se encuentra el producto, retornamos null
         const updatedProduct = { ...productos[productIndex], ...updatedData };
         productos[productIndex] = updatedProduct;
         this.writeProductosFile(productos);
         return updatedProduct;
     }
 
+    // Método para eliminar un producto por ID
     deleteProduct(id) {
         const productos = this.readProductosFile();
         const newProductos = productos.filter((p) => p.id !== id);
-        if (productos.length === newProductos.length) return null;
+        if (productos.length === newProductos.length) return null; // Si no se encontró el producto, retornamos null
         this.writeProductosFile(newProductos);
         return { message: "Producto eliminado exitosamente" };
     }

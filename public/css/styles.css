@@ -47,6 +47,11 @@ ul {
     padding: 0;
 }
 
+/* Lista de productos */
+ul#productos {
+    padding: 0;
+}
+
 ul#productos li {
     background: #ffffff;
     border: 1px solid #ddd;
@@ -63,11 +68,53 @@ ul#productos li:hover {
     background: #f9f9f9;
 }
 
-h1 {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
+/* Detalles del producto */
+.product-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.product-detail img {
+    max-width: 200px;
+    margin: 10px 0;
+}
+
+.product-detail h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
     color: #333;
-    text-align: center;
+}
+
+.product-detail p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.product-detail .button-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.product-detail .button-container a {
+    text-decoration: none;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.product-detail .button-container a:hover {
+    background-color: #45a049;
 }
 
 /* Botones */
@@ -99,4 +146,71 @@ button:hover {
         flex-direction: column;
         align-items: flex-start;
     }
+
+    .product-detail {
+        padding: 15px;
+    }
+
+    .product-detail h2 {
+        font-size: 1.6rem;
+    }
+
+    .product-detail p {
+        font-size: 0.9rem;
+    }
+
+    .product-detail .button-container {
+        flex-direction: column;
+    }
+
+    .product-detail .button-container a {
+        width: 100%;
+        margin-top: 10px;
+    }
+    .product-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    
+    .product-item {
+        border: 1px solid #ddd;
+        padding: 10px;
+        width: 200px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    
+    .product-item img {
+        width: 100%;
+        height: auto;
+    }
+    
+    .pagination {
+        margin-top: 20px;
+        text-align: center;
+    }
+    
+    .pagination a {
+        margin: 0 10px;
+        text-decoration: none;
+    }
+    
+    #cartContainer {
+        margin-top: 20px;
+      }
+      
+      #cartContainer ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      
+      #cartContainer li {
+        margin: 10px 0;
+        background-color: #f4f4f4;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      
 }

@@ -1,42 +1,78 @@
-// routes/carts.js
 const express = require('express');
 const CartManager = require('../managers/CartManager');
 const router = express.Router();
-
-// Instancia del CartManager
 const cartManager = new CartManager();
 
-// Ruta POST /api/carts - Crear un nuevo carrito
+// Crear un nuevo carrito
 router.post('/', (req, res) => {
     const newCart = cartManager.createCart();
-    res.status(201).json(newCart);
+    res.status(201).json({ status: "success", cart: newCart });
 });
 
-// Ruta GET /api/carts/:cid - Obtener un carrito por ID
+// Obtener un carrito por ID
 router.get('/:cid', (req, res) => {
-    const cartId = req.params.cid;
-    const cart = cartManager.getCartById(cartId);
+    const { cid } = req.params;
+    const cart = cartManager.getCartById(cid);
 
     if (!cart) {
-        return res.status(404).json({ error: "Carrito no encontrado" });
+        return res.status(404).json({ status: "error", message: "Cart not found" });
     }
 
-    res.json(cart);
+    res.status(200).json({ status: "success", cart });
 });
 
-// Ruta POST /api/carts/:cid/product/:pid - Agregar un producto a un carrito
+// Agregar un producto a un carrito
 router.post('/:cid/product/:pid', (req, res) => {
-    const cartId = req.params.cid;
-    const productId = req.params.pid;
-    const quantity = parseInt(req.body.quantity) || 1; // Cantidad predeterminada: 1
+    const { cid, pid } = req.params;
+    const { quantity } = req.body;
 
-    const updatedCart = cartManager.addProductToCart(cartId, productId, quantity);
+    const updatedCart = cartManager.addProductToCart(cid, pid, parseInt(quantity) || 1);
 
     if (!updatedCart) {
-        return res.status(404).json({ error: "Carrito no encontrado" });
+        return res.status(404).json({ status: "error", message: "Cart not found" });
     }
 
-    res.json(updatedCart);
+    res.status(200).json({ status: "success", cart: updatedCart });
+});
+
+// Eliminar un producto de un carrito
+router.delete('/:cid/product/:pid', (req, res) => {
+    const { cid, pid } = req.params;
+
+    const updatedCart = cartManager.removeProductFromCart(cid, pid);
+
+    if (!updatedCart) {
+        return res.status(404).json({ status: "error", message: "Cart not found" });
+    }
+
+    res.status(200).json({ status: "success", message: "Product removed", cart: updatedCart });
+});
+
+// Actualizar productos de un carrito
+router.put('/:cid', (req, res) => {
+    const { cid } = req.params;
+    const { products } = req.body;
+
+    const updatedCart = cartManager.updateCart(cid, products);
+
+    if (!updatedCart) {
+        return res.status(404).json({ status: "error", message: "Cart not found" });
+    }
+
+    res.status(200).json({ status: "success", message: "Cart updated", cart: updatedCart });
+});
+
+// Vaciar un carrito
+router.delete('/:cid', (req, res) => {
+    const { cid } = req.params;
+
+    const clearedCart = cartManager.clearCart(cid);
+
+    if (!clearedCart) {
+        return res.status(404).json({ status: "error", message: "Cart not found" });
+    }
+
+    res.status(200).json({ status: "success", message: "Cart emptied", cart: clearedCart });
 });
 
 module.exports = router;

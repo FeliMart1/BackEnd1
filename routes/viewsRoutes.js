@@ -12,4 +12,5 @@ router.get('/realtimeproducts', (req, res) => {
     res.render('realTimeProducts', { title: 'Productos en Tiempo Real', productos });
 });
 
+
 module.exports = router;

@@ -1,1 +1,119 @@
-[]
+[
+  {
+    "id": 1,
+    "title": "Camiseta básica",
+    "description": "Camiseta de algodón 100%, disponible en varios colores.",
+    "price": 1500,
+    "thumbnail": "https://example.com/camiseta.jpg",
+    "code": "CAMI123",
+    "stock": 50,
+    "category": "Ropa"
+  },
+  {
+    "id": 2,
+    "title": "Pantalón de mezclilla",
+    "description": "Pantalón de mezclilla clásico para hombre.",
+    "price": 3500,
+    "thumbnail": "https://example.com/pantalon.jpg",
+    "code": "PANT456",
+    "stock": 30,
+    "category": "Ropa"
+  },
+  {
+    "id": 3,
+    "title": "Zapatillas deportivas",
+    "description": "Zapatillas ligeras y cómodas, ideales para correr.",
+    "price": 5800,
+    "thumbnail": "https://example.com/zapatillas.jpg",
+    "code": "ZAPA789",
+    "stock": 20,
+    "category": "Calzado"
+  },
+  {
+    "id": 4,
+    "title": "Zapatos de vestir",
+    "description": "Zapatos elegantes para hombre, ideales para ocasiones formales.",
+    "price": 6000,
+    "thumbnail": "https://example.com/zapatos.jpg",
+    "code": "ZAPA123",
+    "stock": 10,
+    "category": "Calzado"
+  },
+  {
+    "id": 5,
+    "title": "Producto de prueba",
+    "description": "Descripción del producto de prueba",
+    "code": "12345",
+    "price": 100,
+    "status": true,
+    "stock": 50,
+    "category": "Electrónica",
+    "thumbnails": ""
+  },
+  {
+    "id": 6,
+    "title": "adasdasdasdasd",
+    "description": "dssddssdsdsdsd",
+    "code": "asdasdasd",
+    "price": 123123123,
+    "status": true,
+    "stock": 50,
+    "category": "Ropa",
+    "thumbnails": []
+  },
+  {
+    "id": 7,
+    "title": "adasdasdasdasd",
+    "description": "dssddssdsdsdsd",
+    "code": "asdasdasd",
+    "price": 111,
+    "status": true,
+    "stock": 50,
+    "category": "Ropa",
+    "thumbnails": []
+  },
+  {
+    "id": 8,
+    "title": "adasdasdasdasd",
+    "description": "dssddssdsdsdsd",
+    "code": "asdasdasd",
+    "price": 111,
+    "status": true,
+    "stock": 50,
+    "category": "Ropa",
+    "thumbnails": []
+  },
+  {
+    "id": 9,
+    "title": "Nuevo Producto",
+    "description": "Descripción del nuevo producto",
+    "code": "NP123",
+    "price": 1200,
+    "status": true,
+    "stock": 15,
+    "category": "Ropa",
+    "thumbnails": []
+  },
+  {
+    "id": 10,
+    "title": "Nuevo Producto",
+    "description": "Descripción del nuevo producto",
+    "code": "NP123",
+    "price": 1200,
+    "status": true,
+    "stock": 15,
+    "category": "Ropa",
+    "thumbnails": []
+  },
+  {
+    "id": 11,
+    "title": "Nuevo Producto",
+    "description": "Descripción del nuevo producto",
+    "code": "NP123",
+    "price": 1231231,
+    "status": true,
+    "stock": 15,
+    "category": "Ropa",
+    "thumbnails": []
+  }
+]

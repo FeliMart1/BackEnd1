@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos en Tiempo Real</title>
-</head>
-<body>
+<!-- realTimeProducts.handlebars -->
 <h1>Lista de Productos en Tiempo Real</h1>
 <ul id="productos">
     {{#each productos}}
@@ -17,13 +10,26 @@
 <script>
     const socket = io();
 
+    // Verifica si la conexión está activa
+    socket.on('connect', () => {
+        console.log('Conectado a Socket.io');
+    });
+
     // Escuchar evento de actualización de productos
-    socket.on('actualizarProductos', (producto) => {
+    socket.on('actualizarProductos', (productos) => {
+        console.log('Productos recibidos:', productos);  // Verifica si los productos se reciben correctamente
+
+        // Vaciar la lista actual
         const lista = document.getElementById('productos');
-        const nuevoProducto = document.createElement('li');
-        nuevoProducto.textContent = `${producto.title} - $${producto.price}`;
-        lista.appendChild(nuevoProducto);
+        lista.innerHTML = '';  // Limpiar la lista de productos
+
+        // Agregar todos los productos recibidos
+        productos.forEach(producto => {
+            const nuevoProducto = document.createElement('li');
+            nuevoProducto.textContent = `${producto.title} - $${producto.price}`;
+            lista.appendChild(nuevoProducto);
+        });
     });
 </script>
-</body>
-</html>
+
+

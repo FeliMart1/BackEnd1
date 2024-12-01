@@ -1,0 +1,42 @@
+<h1>{{title}}</h1>
+
+<!-- Filtros de búsqueda y ordenamiento -->
+<form method="get" action="/products">
+    <label for="category">Categoría:</label>
+    <input type="text" name="category" value="{{category}}" placeholder="Filtrar por categoría">
+
+    <label for="sort">Ordenar por precio:</label>
+    <select name="sort">
+        <option value="asc" {{#if (eq sort "asc")}}selected{{/if}}>Ascendente</option>
+        <option value="desc" {{#if (eq sort "desc")}}selected{{/if}}>Descendente</option>
+    </select>
+    
+    <button type="submit">Aplicar filtros</button>
+</form>
+
+<!-- Productos -->
+<div class="product-list">
+    {{#each productos}}
+        <div class="product-item">
+            <h3>{{this.title}}</h3>
+            <img src="{{this.thumbnail}}" alt="{{this.title}}" width="100">
+            <p>{{this.description}}</p>
+            <p><strong>Precio:</strong> ${{this.price}}</p>
+            <p><strong>Stock:</strong> {{this.stock}}</p>
+            <a href="/products/{{this.id}}">Ver más detalles</a>
+        </div>
+    {{else}}
+        <p>No se encontraron productos.</p>
+    {{/each}}
+</div>
+
+<!-- Paginación -->
+<div class="pagination">
+    {{#if result.hasPrevPage}}
+        <a href="{{result.prevLink}}">Página Anterior</a>
+    {{/if}}
+    <span>Página {{result.page}} de {{result.totalPages}}</span>
+    {{#if result.hasNextPage}}
+        <a href="{{result.nextLink}}">Página Siguiente</a>
+    {{/if}}
+</div>
