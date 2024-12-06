@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const productos = require('../data/productos.json'); // Simulamos datos
-
+const productos = require('../data/productos.json'); 
 // Ruta principal para la vista home
 router.get('/', (req, res) => {
     res.render('home', { title: 'Página Principal', productos });

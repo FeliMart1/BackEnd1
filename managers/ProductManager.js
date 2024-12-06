@@ -1,73 +1,52 @@
-// managers/ProductManager.js
-const fs = require('fs');
-const path = require('path');
+const Product = require('../models/Product');
 
 class ProductManager {
-    constructor() {
-        this.productosFilePath = path.join(__dirname, '../data/productos.json');
-    }
-
-    readProductosFile() {
+    async getAllProducts(limit) {
         try {
-            const data = fs.readFileSync(this.productosFilePath, 'utf-8');
-            return JSON.parse(data);
+            const products = await Product.find();
+            return limit ? products.slice(0, limit) : products;
         } catch (error) {
-            console.error("Error al leer el archivo productos.json", error);
-            return [];
+            console.error("Error al obtener productos:", error);
+            throw error;
         }
     }
 
-    writeProductosFile(data) {
+    async getProductById(id) {
         try {
-            fs.writeFileSync(this.productosFilePath, JSON.stringify(data, null, 2));
+            return await Product.findById(id);
         } catch (error) {
-            console.error("Error al escribir en el archivo productos.json", error);
+            console.error("Error al obtener producto por ID:", error);
+            return null;
         }
     }
 
-    // Método para agregar un nuevo producto
-    addProduct(newProduct) {
-        const productos = this.readProductosFile();
-        const lastId = productos.length > 0 ? productos[productos.length - 1].id : 0; 
-        const newId = lastId + 1;
-        const productWithId = { id: newId, ...newProduct };
-        productos.push(productWithId);    
-        this.writeProductosFile(productos);
-    
-        return productWithId;
-    }
-    
-
-    // Método para obtener todos los productos
-    getAllProducts(limit) {
-        const productos = this.readProductosFile();
-        return limit ? productos.slice(0, limit) : productos;
+    async addProduct(newProductData) {
+        try {
+            const product = new Product(newProductData);
+            return await product.save();
+        } catch (error) {
+            console.error("Error al agregar producto:", error);
+            throw error;
+        }
     }
 
-    // Método para obtener un producto por ID
-    getProductById(id) {
-        const productos = this.readProductosFile();
-        return productos.find((p) => p.id === id);
+    async updateProduct(id, updatedData) {
+        try {
+            return await Product.findByIdAndUpdate(id, updatedData, { new: true });
+        } catch (error) {
+            console.error("Error al actualizar producto:", error);
+            return null;
+        }
     }
 
-    // Método para actualizar un producto por ID
-    updateProduct(id, updatedData) {
-        const productos = this.readProductosFile();
-        const productIndex = productos.findIndex((p) => p.id === id);
-        if (productIndex === -1) return null; // Si no se encuentra el producto, retornamos null
-        const updatedProduct = { ...productos[productIndex], ...updatedData };
-        productos[productIndex] = updatedProduct;
-        this.writeProductosFile(productos);
-        return updatedProduct;
-    }
-
-    // Método para eliminar un producto por ID
-    deleteProduct(id) {
-        const productos = this.readProductosFile();
-        const newProductos = productos.filter((p) => p.id !== id);
-        if (productos.length === newProductos.length) return null; // Si no se encontró el producto, retornamos null
-        this.writeProductosFile(newProductos);
-        return { message: "Producto eliminado exitosamente" };
+    async deleteProduct(id) {
+        try {
+            await Product.findByIdAndDelete(id);
+            return { message: "Producto eliminado exitosamente" };
+        } catch (error) {
+            console.error("Error al eliminar producto:", error);
+            return null;
+        }
     }
 }
 

@@ -1,101 +1,68 @@
-const fs = require('fs');
-const path = require('path');
+const Cart = require('../models/Cart');
 
 class CartManager {
-    constructor() {
-        this.cartsFilePath = path.join(__dirname, '../data/carts.json');
-    }
-
-    readCartsFile() {
+    async createCart() {
         try {
-            const data = fs.readFileSync(this.cartsFilePath, 'utf-8');
-            return JSON.parse(data);
+            const newCart = new Cart({ products: [] });
+            return await newCart.save();
         } catch (error) {
-            console.error("Error al leer el archivo carts.json:", error);
-            return [];
+            console.error("Error al crear carrito:", error);
+            throw error;
         }
     }
 
-    writeCartsFile(data) {
+    async getCartById(id) {
         try {
-            fs.writeFileSync(this.cartsFilePath, JSON.stringify(data, null, 2));
+            return await Cart.findById(id).populate('products.product');
         } catch (error) {
-            console.error("Error al escribir en el archivo carts.json:", error);
+            console.error("Error al obtener carrito por ID:", error);
+            return null;
         }
     }
 
-    createCart() {
-        const carts = this.readCartsFile();
-        const newCart = {
-            id: this.generateUniqueId(),
-            products: []
-        };
-        carts.push(newCart);
-        this.writeCartsFile(carts);
-        return newCart;
-    }
+    async addProductToCart(cartId, productId, quantity = 1) {
+        try {
+            const cart = await Cart.findById(cartId);
+            if (!cart) return null;
 
-    generateUniqueId() {
-        return Math.floor(Math.random() * 1000000).toString();
-    }
+            const productIndex = cart.products.findIndex(p => p.product.toString() === productId);
+            if (productIndex !== -1) {
+                cart.products[productIndex].quantity += quantity;
+            } else {
+                cart.products.push({ product: productId, quantity });
+            }
 
-    getCartById(id) {
-        const carts = this.readCartsFile();
-        return carts.find((cart) => cart.id === id);
-    }
-
-    addProductToCart(cartId, productId, quantity = 1) {
-        const carts = this.readCartsFile();
-        const cartIndex = carts.findIndex((cart) => cart.id === cartId);
-
-        if (cartIndex === -1) return null;
-
-        const productIndex = carts[cartIndex].products.findIndex((p) => p.product === productId);
-
-        if (productIndex !== -1) {
-            carts[cartIndex].products[productIndex].quantity += quantity;
-        } else {
-            carts[cartIndex].products.push({ product: productId, quantity });
+            return await cart.save();
+        } catch (error) {
+            console.error("Error al agregar producto al carrito:", error);
+            throw error;
         }
-
-        this.writeCartsFile(carts);
-        return carts[cartIndex];
     }
 
-    removeProductFromCart(cartId, productId) {
-        const carts = this.readCartsFile();
-        const cartIndex = carts.findIndex((cart) => cart.id === cartId);
+    async removeProductFromCart(cartId, productId) {
+        try {
+            const cart = await Cart.findById(cartId);
+            if (!cart) return null;
 
-        if (cartIndex === -1) return null;
-
-        carts[cartIndex].products = carts[cartIndex].products.filter((p) => p.product !== productId);
-
-        this.writeCartsFile(carts);
-        return carts[cartIndex];
+            cart.products = cart.products.filter(p => p.product.toString() !== productId);
+            return await cart.save();
+        } catch (error) {
+            console.error("Error al eliminar producto del carrito:", error);
+            throw error;
+        }
     }
 
-    updateCart(cartId, products) {
-        const carts = this.readCartsFile();
-        const cartIndex = carts.findIndex((cart) => cart.id === cartId);
+    async clearCart(cartId) {
+        try {
+            const cart = await Cart.findById(cartId);
+            if (!cart) return null;
 
-        if (cartIndex === -1) return null;
-
-        carts[cartIndex].products = products;
-
-        this.writeCartsFile(carts);
-        return carts[cartIndex];
-    }
-
-    clearCart(cartId) {
-        const carts = this.readCartsFile();
-        const cartIndex = carts.findIndex((cart) => cart.id === cartId);
-
-        if (cartIndex === -1) return null;
-
-        carts[cartIndex].products = [];
-
-        this.writeCartsFile(carts);
-        return carts[cartIndex];
+            cart.products = [];
+            return await cart.save();
+        } catch (error) {
+            console.error("Error al vaciar carrito:", error);
+            throw error;
+        }
     }
 }
 
